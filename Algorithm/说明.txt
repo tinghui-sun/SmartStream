@@ -1,0 +1,45 @@
+目录名称说明:
+	PluginManager 所有插件的管理类,负责算法插件的创建、调用、及销毁
+	***Detection ***目标检测算法。目标检测只识别到图像中是否存在该目标及该目标的坐标信息,不提取特征
+	***Recognition ***目标识别算法。输入特定类型的图片(如人脸、人体等)，输出该种图片的详细特征
+	
+目录结构说明:
+PluginManager										插件管理器
+include													所有算法插件的通用头文件
+AlgorithmPlugin									算法插件
+----***Detection								特定目标检测算法
+--------PingAnTr								基于TensorRr实现的检测算法
+------------plugin							算法插件源码
+------------model								算法插件模型
+------------lib									算法插件库
+------------conf								算法插件配置文件
+--------PingAnRest							基于RestFul API实现的检测算法
+--------****										其他检测算法
+----***Recognition							特定目标分析算法
+--------PingAnTr								基于TensorRr实现的识别算法
+--------PingAnRest							基于RestFul API实现的识别算法
+--------****										其他分析算法
+
+
+
+使用说明
+1. 拷贝以下源码目录
+		CBB\Algorithm\AlgorithmPlugin\算法\conf
+		CBB\Algorithm\AlgorithmPlugin\算法\data
+		CBB\Algorithm\AlgorithmPlugin\算法\model
+	到pagkage\linux\x64\debug\plugins对应的以下目录中
+		plugins\算法\conf
+		plugins\算法\data
+		plugins\算法\model
+  如果plugins\算法\data有压缩包，需要解压
+  
+2. 拷贝CBB\Algorithm\AlgorithmPlugin\算法编译出的动态库到
+		plugins\算法\lib目录下
+		
+3. 在plguins上层目录执行./vias	
+
+4. 目录说明
+	CBB\Algorithm\AlgorithmPlugin\算法\conf 存放算法配置文件
+	CBB\Algorithm\AlgorithmPlugin\算法\data 存放生成TensorRT引擎需要权重文件和矫正数据
+	CBB\Algorithm\AlgorithmPlugin\算法\model 存放TensorRT推理引擎
+	当model目录下推理引擎不存在时,才会用到data目录中的文件生成。引擎生成很耗时

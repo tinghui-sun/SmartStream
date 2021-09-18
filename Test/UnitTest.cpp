@@ -1,5 +1,6 @@
 ﻿#include "UnitTest.h"
 #include "FFMpegTest.h"
+#include "TensorrtTest.h"
 #include "CppUnit/TestRunner.h"
 
 #if defined(_DEBUG)
@@ -9,7 +10,7 @@
 #pragma comment(lib, "zlmediakitd.lib")
 #pragma comment(lib, "zltoolkitd.lib")
 #pragma comment(lib, "mk_apid.lib")
-#pragma comment(lib, "CppUnitmdd.lib")
+#pragma comment(lib, "CppUnitd.lib")
 #else
 #pragma comment(lib, "flv.lib")
 #pragma comment(lib, "mov.lib")
@@ -27,6 +28,7 @@ CppUnit::Test* SmartStreamUnitTest::suite()
 	CppUnit::TestSuite* pSuite = new CppUnit::TestSuite();
 
 	pSuite->addTest(FFMpegTest::suite());
+	pSuite->addTest(TensorrtTest::suite());
 
 	return pSuite;
 };

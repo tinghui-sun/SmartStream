@@ -1,5 +1,5 @@
-#ifndef COMMON_TEST_H
-#define COMMON_TEST_H
+#ifndef FFMPEG_TEST_H
+#define FFMPEG_TEST_H
 
 #include "CppUnit/TestCase.h"
 #include <memory>

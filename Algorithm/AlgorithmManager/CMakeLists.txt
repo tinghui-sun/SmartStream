@@ -1,0 +1,16 @@
+project(AlgorithmManager)
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=gnu++0x -Wl,-Bsymbolic")
+aux_source_directory(src AlgorithmManager_SRC)
+
+include(../../cbb.cmake)
+include_directories(../include)
+if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+	add_definitions(-D GLGOSDK_EXPORTS)
+	if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+		add_definitions(-D _DEBUG -D _WINDOWS -D _USRDLL)
+	endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
+endif()
+
+add_library(AlgorithmManager SHARED ${AlgorithmManager_SRC})
+#install(TARGETS AlgorithmManager DESTINATION ${LIBRARY_PATH})
+add_subdirectory(test)

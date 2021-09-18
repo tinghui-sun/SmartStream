@@ -19,9 +19,10 @@ endif()
 set(VS_FALGS "/wd4819" )
 
 set(RELEASE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/release)
-SET(LIBRARY_OUTPUT_PATH ${RELEASE_DIR}/${CMAKE_SYSTEM_NAME})
-SET(EXECUTABLE_OUTPUT_PATH ${RELEASE_DIR}/${CMAKE_SYSTEM_NAME})
+set(LIBRARY_OUTPUT_PATH ${RELEASE_DIR}/${CMAKE_SYSTEM_NAME})
+set(EXECUTABLE_OUTPUT_PATH ${RELEASE_DIR}/${CMAKE_SYSTEM_NAME})
 
+LINK_DIRECTORIES(${LIBRARY_OUTPUT_PATH})
 
 if (CMAKE_SYSTEM_NAME MATCHES "Linux")
     add_compile_options(-fPIC -Wall -Wno-unused-variable -Wno-unused-value)
@@ -50,10 +51,13 @@ if(POCO_FOUND)
 	message("find POCO ${POCO_INCLUDE_DIR}")
     include_directories(${POCO_INCLUDE_DIR})
 	link_directories(${POCO_LINK_DIRECTORIES})
-	add_definitions(-DPOCO_STATIC)
+	#add_definitions(-DPOCO_STATIC)
 	#POCO的库在头文件指定链接名字,不能放到LINK_LIB_LIST,只需要指定link_directories,POCO会自动查找
     #list(APPEND  LINK_LIB_LIST ${POCO_LIBRARIES})
 endif()
+
+add_subdirectory(Algorithm)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Algorithm/include)
 
 add_subdirectory(Test)
 
