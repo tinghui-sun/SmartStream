@@ -1,16 +1,32 @@
-project(AlgorithmManager)
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=gnu++0x -Wl,-Bsymbolic")
-aux_source_directory(src AlgorithmManager_SRC)
+cmake_minimum_required(VERSION 3.20)
 
-include(../../cbb.cmake)
+project(AlgorithmManager)
+
+if (CMAKE_SYSTEM_NAME MATCHES "Linux")
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=gnu++0x -Wl,-Bsymbolic")
+endif ()
+
+find_package(FFMPEG REQUIRED)
+find_package(POCO REQUIRED)
+
+
+aux_source_directory(src __CODES)
+set(CODES ${__CODES})
+#aux_source_directory(./http __CODES)
+#set(CODES ${CODES} ${__CODES})
+
 include_directories(../include)
+include_directories(${POCO_INCLUDE_DIRS})
+include_directories(${FFMPEG_INCLUDE_DIRS})
+
+link_directories(${POCO_LINK_DIRECTORIES})
+
 if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-	add_definitions(-D GLGOSDK_EXPORTS)
-	if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-		add_definitions(-D _DEBUG -D _WINDOWS -D _USRDLL)
-	endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
+	add_definitions(-DGLGOSDK_EXPORTS)
 endif()
 
-add_library(AlgorithmManager SHARED ${AlgorithmManager_SRC})
-#install(TARGETS AlgorithmManager DESTINATION ${LIBRARY_PATH})
-add_subdirectory(test)
+add_library(AlgorithmManager SHARED ${CODES})
+#add_library(AlgorithmManager SHARED ${CODES} ${FFMPEG_LIBRARYS} ${POCO_LIBRARYS})
+
+install(TARGETS AlgorithmManager DESTINATION ${LIBRARY_PATH})
+#add_subdirectory(test)
