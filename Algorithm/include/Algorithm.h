@@ -8,10 +8,12 @@
 #include <memory>
 #include <string>
 #include <map>
+#include <vector>
 
 using namespace std;
 
 #define FEATURE_MAX_SIZE 512
+
 //算法类型
 enum ALGOType
 {
@@ -50,6 +52,8 @@ enum ALGOImageFormat
 	ALGOImageFormatWmf = 14,
 	ALGOImageFormatJp2 = 15,
 	ALGOImageFormatCVMat = 16,
+	ALGOImageFormatRGB = 17,
+	ALGOImageFormatBRG = 18,
 	ALGOImageFormatOther = 999
 };
 
@@ -356,11 +360,11 @@ enum ALGOObjType
 {
 	ALGOObjTypeBody = 1,//人体
 	ALGOObjTypeFace = 2,//人脸
-	ALGOObjTypeMotorVehicle = 3,//机动车
-	ALGOObjTypeNoMotorVehicle = 4,//非机动车
+	ALGOObjTypeMotor = 3,//机动车
+	ALGOObjTypeNoMotor = 4,//非机动车
 	ALGOObjTypeThing = 5,//物品
 	ALGOObjTypeScene = 6,//场景
-	ALGOBufferUnknow = 999//未知
+	ALGOObjTypeDefault = 999//未知
 };
 
 //人体属性
@@ -762,7 +766,9 @@ enum ALGOObjPropertyValueType
 	ALGOObjPropertyTypeString = 0,
 	ALGOObjPropertyTypeBool,
 	ALGOObjPropertyTypeInt32,
+	ALGOObjPropertyTypeUInt32,
 	ALGOObjPropertyTypeInt64,
+	ALGOObjPropertyTypeUInt64,
 	ALGOObjPropertyTypeFloat,
 	ALGOObjPropertyTypeDouble,
 };
@@ -771,17 +777,18 @@ enum ALGOObjPropertyValueType
 struct ALGOObjProperty
 {
 	std::string propertyName;
-	int propertyType;
 	std::string propertyValue;
-	ALGOObjPropertyValueType propertyValueType;
+	ALGOObjPropertyValueType propertyValueType = ALGOObjPropertyTypeString;
 };
 
 //识别到的物体
 struct ALGOObjectParam
 {
-	int objectId = 0;	 //算法内部生成的对象ID,可用于判断是否为同一对象
-	ALGOObjType objType; //物体类型
-	float score = 0;	//相识度0到1之间的浮点数，越靠近1越类似
+	int objectId = 0;		//算法内部生成的对象ID,可用于判断是否为同一对象
+	int objType;			//物体类型
+	std::string objLabel;	//标注物体的名称
+	float confidence = 0;	//相识度0到1之间的浮点数，越靠近1越类似
+	int roiId = 0;			//当前目标所在ROI区域ID
 	ALGOObjBounding boundingBox; //物体在原图中的边界
 	std::list<ALGOObjProperty> propertyList; //识别到的物体属性
 };
@@ -804,10 +811,22 @@ struct ALGOVAResult
 {	
 	ErrAlgorithm code = ErrALGOSuccess;		//图片分析结果
 	ALGOImageInfo imageInfo;				//调用AlgorithmVAInterface::analyzeImage时传入的待分析图片信息
-	//map<ALGOObjType, list<ALGOObjectParam>> objParamList;	//分析出的图片中的物体信息,按照物体类型分组
-	list<ALGOObjectParam> objParamList;	//分析出的图片中的物体信息,按照物体类型分组
-	int statisticsNum = 0;					//人员、车辆等统计算法得到的统计数量。是对一系列图片统计后的数值。对objParamList有做去重
+	map<ALGOObjType, list<ALGOObjectParam>> objParams;	//分析出的图片中的物体信息,按照物体类型分组
+	//list<ALGOObjectParam> objParams;		//分析出的图片中的物体信息,按照物体类型分组
+	int statisticsNum = 0;					//人员、车辆等统计算法得到的统计数量。是对一系列图片统计后的数值。对objParams有做去重
 	string userData;						//算法想要透传给上层应用的数据
+};
+
+struct ROIPoint
+{
+	int x, y;
+};
+
+struct ROI
+{
+	int roiId = 0;
+	string roiTitle;
+	vector<ROIPoint> points;
 };
 
 //接口参数类型
