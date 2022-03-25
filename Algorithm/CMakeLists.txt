@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.20)
 project(Algorithm)
 
 #设置bin和lib库目录
-set(ThirdPartPath ${PROJECT_SOURCE_DIR}/../3rdpart/${CMAKE_SYSTEM_NAME})
+set(ThirdPartPath ${PROJECT_SOURCE_DIR}/3rdpart/${CMAKE_SYSTEM_NAME})
 set(FFMPEG_PATH ${ThirdPartPath}/ffmpeg)
 set(POCO_PATH ${ThirdPartPath}/Poco)
 set(OpenCV_DIR ${ThirdPartPath}/opencv)
