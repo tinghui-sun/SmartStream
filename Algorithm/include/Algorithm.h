@@ -30,6 +30,7 @@ enum ALGOType
 	ALGOTypePlateRecognition,			//车牌识别算法
 	ALGOTypeCommonRecognition,			//通用识别算法
 	ALGOTypeVideoQualityDetection,		//视频质量检测
+	ALGOTypePluginDemo,					//插件示例
 	ALGOTypeMax							//
 };
 

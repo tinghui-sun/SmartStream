@@ -14,6 +14,7 @@ public:
 
 public:
 	void PluginInitTest();
+
 	void PluginTrYolov5Test();
 
 	void PluginTrFaceDetectionTest();

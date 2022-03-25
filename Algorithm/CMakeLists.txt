@@ -16,4 +16,5 @@ set(CMAKE_PREFIX_PATH ${CMAKE_MODULE_PATH})
 
 add_subdirectory(AlgorithmManager)
 add_subdirectory(AlgorithmTest)
+add_subdirectory(AlgorithmPlugin)
 

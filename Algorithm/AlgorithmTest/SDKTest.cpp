@@ -76,6 +76,8 @@ public:
 
 	virtual void algorithmVAFinished(const std::list <ALGOVAResult>& vaResult)override
 	{
+		cout << "algorithmVAFinished " << vaResult.size() << endl;
+
 		if(callbackIndex == 1)
 		{
 			static int index = 0;
@@ -168,7 +170,7 @@ void SDKTest::PluginInitTest()
 	gpuList.push_back(2);
 	gpuList.push_back(3);
 	AlgorithmManager::instances().initManager();
-	AlgorithmPluginInterface* mtdPlugin = AlgorithmManager::instances().getAlgorithmPlugin(ALGOTypeMotorVehicleStatistics, gpuList);
+	AlgorithmPluginInterface* mtdPlugin = AlgorithmManager::instances().getAlgorithmPlugin(ALGOTypePluginDemo, gpuList);
 
 	assert(mtdPlugin != nullptr);
 	
