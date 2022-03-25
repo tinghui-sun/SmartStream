@@ -38,6 +38,7 @@ string ALGOName[]
 	"PlateRecognition",
 	"CommonRecognition",
 	"VideoQualityDetection",
+	"PluginDemo",
 };
 
 AlgorithmManager::AlgorithmManager()
@@ -64,8 +65,8 @@ bool AlgorithmManager::initManager()
 		return true;
 	}
 	string appPath = Path::current();// = System::getApplicationPath();
-	string pluginPath = appPath + "/plugins/";// = System::getApplicationPath();
-	string configFilePath = pluginPath + "/plugins.ini";
+	string pluginPath = appPath + "plugins" + Path::separator();// = System::getApplicationPath();
+	string configFilePath = pluginPath + "plugins.ini";
 
 	AlgorithmLogger::algorithmLogerInit(configFilePath, pluginPath);
 
@@ -113,7 +114,7 @@ bool AlgorithmManager::initManager()
 			//插件位于 应用程序目录/plugins/插件目录/下
 			//不同算法的插件目录在plugins/plugins.ini配置文件中
 			//算法插件目录名必须和算法插件的动态库名保持一致		
-			string curPluginPath = pluginPath + pluginName + "/lib";
+			string curPluginPath = pluginPath + pluginName + Path::separator() + "lib";
 			curPath.append(curPluginPath); //插件所在目录
 
 			//string libPath = appPath + "/plugins/" + pluginName + "/" + pluginName;
@@ -123,9 +124,9 @@ bool AlgorithmManager::initManager()
 			//记录插件动态库名字			
 #ifdef __GNUC__
 
-			m_PluginPathMap[i] = curPluginPath + "/lib" + pluginName.append(SharedLibrary::suffix());
+			m_PluginPathMap[i] = curPluginPath + Path::separator() + "lib" + pluginName.append(SharedLibrary::suffix());
 #else	
-			m_PluginPathMap[i] = curPluginPath + "/" + pluginName.append(SharedLibrary::suffix());
+			m_PluginPathMap[i] = curPluginPath + Path::separator() + pluginName.append(SharedLibrary::suffix());
 #endif
 			AlgoMsgError(AlgorithmLogger::instance(), "AlgorithmManager::AlgorithmManager add plugin %s", m_PluginPathMap[i].c_str());
 		}
@@ -187,6 +188,12 @@ AlgorithmPluginInterface* AlgorithmManager::createAlgorithmPlugin(ALGOType type,
 {
 	string pluginPath = m_PluginPathMap[type];
 
+	Poco::File file(pluginPath);
+	if (!file.exists())
+	{
+		AlgorithmLogger::instance()->log(AlgoLogError, "plugin lib " + pluginPath + " not exist!");
+		return nullptr;
+	}
 
 	auto classLoaderIt = m_ClassLoaderMap.find(type);
 	if (classLoaderIt == m_ClassLoaderMap.end())
