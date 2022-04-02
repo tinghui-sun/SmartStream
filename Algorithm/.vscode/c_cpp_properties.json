@@ -1,0 +1,29 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/3rdpart/Linux/Poco/include",
+                "${workspaceFolder}/3rdpart/Linux/opencv/include",
+                "${workspaceFolder}/include",
+                "${workspaceFolder}/AlgorithmPlugin/TrafficCount/TrafficCount/thirdParty/ByteTrack/include/",
+                "${workspaceFolder}/AlgorithmPlugin/TrafficCount/TrafficCount/thirdParty/Eigen/include/",
+                "${workspaceFolder}/AlgorithmPlugin/TrafficCount/TrafficCount/TrackerModule/include/",
+                "${workspaceFolder}/AlgorithmPlugin/TrafficCount/src/"
+
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "windowsSdkVersion": "10.0.17763.0",
+            "compilerPath": "D:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.16.27023/bin/Hostx64/x64/cl.exe",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "windows-msvc-x64"
+        }
+    ],
+    "version": 4
+}

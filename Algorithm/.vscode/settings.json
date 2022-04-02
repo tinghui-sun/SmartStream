@@ -1,0 +1,21 @@
+{
+    "cmake.configureOnOpen": false,
+    "files.encoding": "gbk",
+    "files.associations": {
+        "xstring": "cpp",
+        "ios": "cpp",
+        "chrono": "cpp",
+        "memory": "cpp",
+        "vector": "cpp",
+        "list": "cpp",
+        "array": "cpp",
+        "xiosbase": "cpp",
+        "xutility": "cpp",
+        "map": "cpp",
+        "cmath": "cpp",
+        "complex": "cpp",
+        "utility": "cpp",
+        "xtree": "cpp",
+        "deque": "cpp"
+    }
+}
