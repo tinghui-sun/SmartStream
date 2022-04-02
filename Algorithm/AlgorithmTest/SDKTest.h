@@ -14,17 +14,9 @@ public:
 
 public:
 	void PluginInitTest();
-
-	void PluginTrYolov5Test();
-
-	void PluginTrFaceDetectionTest();
-	void PluginTrFaceRecognitionTest();
-	void PluginTrFaceRecognitionFeatureCompareTest(); 
-	void PluginTrFaceDRCTest();
-
-	void VideoQualtyTest();
 	void LogTest();
 	void PTest();
+	void MotorVehicleStatistics();
 
 private:
 	virtual void algorithmVAFinished(const std::list <ALGOVAResult>& vaResult) override;

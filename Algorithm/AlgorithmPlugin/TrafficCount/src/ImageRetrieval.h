@@ -26,5 +26,8 @@ public:
 
 	//特征提取，提取image的特征值，后面可用来做特征比对
 	virtual ErrAlgorithm featureExtra(const ALGOImageInfo& imageInfo, IRFeatureInfo& fetureInfo) override;
+
+	private:
+	int mGpuId;
 };
 

@@ -1,7 +1,7 @@
 #include "ImageRetrieval.h"
 #include "GlobalParm.h"
 
-ImageRetrieval::ImageRetrieval(int gpuId)
+ImageRetrieval::ImageRetrieval(int gpuId):mGpuId(gpuId)
 {
 }
 

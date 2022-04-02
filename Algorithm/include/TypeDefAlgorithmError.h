@@ -26,6 +26,15 @@ enum ErrAlgorithm
 	//非法参数
 	ErrALGOParamInvalid = -102,
 
+	//功能不支持
+	ErrALGOUnSupport = -103,
+
+	//插件初始化失败
+	ErrALGOInitFailed = -104,
+
+	//算法执行失败
+	ErrALGORunFailed = -105,
+
 	// 构造的cv::Mat为空
 	ErrALGOMatEmpty = -110,
 

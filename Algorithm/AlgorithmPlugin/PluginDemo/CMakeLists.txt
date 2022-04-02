@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.10)
 
 project(PluginDemo)
 
@@ -7,6 +7,8 @@ if (CMAKE_SYSTEM_NAME MATCHES "Linux")
 endif ()
 
 find_package(POCO REQUIRED)
+
+set(SDK_DIR ${PROJECT_SOURCE_DIR}/AlgorithmPlugin/PluginDemo/SDK)
 
 aux_source_directory(src __CODES)
 set(CODES ${__CODES})
@@ -22,5 +24,5 @@ endif()
 
 add_library(PluginDemo SHARED ${CODES})
 
-install(TARGETS PluginDemo DESTINATION ${LIBRARY_PATH})
+#install(TARGETS PluginDemo DESTINATION ${LIBRARY_PATH})
 

@@ -3,11 +3,12 @@
 class VideoAnalysis: public AlgorithmVAInterface
 {
 public:
-	VideoAnalysis();
+	VideoAnalysis(int gpuId);
 	virtual ~VideoAnalysis();
 
 public:
 	virtual ALGOAbility getAbility() override;
-	virtual ErrAlgorithm analyzeImage(const std::list <ALGOImageInfo>& imageList) override;
+	virtual ErrAlgorithm analyzeImageASync(const std::list <ALGOImageInfo>& imageList) override;
+	virtual ErrAlgorithm analyzeImageSync(const std::list<ALGOImageInfo>& imageList, std::list <ALGOVAResult>& vaResult) override;
 };
 

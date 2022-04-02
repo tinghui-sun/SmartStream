@@ -1,3 +1,4 @@
+#	
 project(AlgorithmTest)
 
 #set(CMAKE_BUILD_TYPE Release)
@@ -14,11 +15,13 @@ endif()
 find_package(FFMPEG REQUIRED)
 find_package(POCO REQUIRED)
 find_package(OpenCV REQUIRED)
+find_package(CUDA REQUIRED)
 
 include_directories(../include)
 include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories(${POCO_INCLUDE_DIRS})
 include_directories(${FFMPEG_INCLUDE_DIRS})
+include_directories(${CUDA_INCLUDE_DIRS})
 
 aux_source_directory(./ __CODES)
 set(CODES ${__CODES})
@@ -29,8 +32,15 @@ link_directories(${PROJECT_BINARY_DIR}/../AlgorithmManager/Debug/)
 add_executable(AlgorithmTest ${CODES})
 
 message(${OpenCV_LIBS})
+message(${POCO_LIBRARIES})
+message(${FFMPEG_LIBRARIES})
 
-target_link_libraries(AlgorithmTest AlgorithmManager.lib ${FFMPEG_LIBRARYS} ${POCO_LIBRARYS} ${OpenCV_LIBS})
+#set_target_properties(AlgorithmTest PROPERTIES LINK_FLAGS "-Wl,-rpath,./plugins/TrafficCount/lib:./:./lib:/vms/code/sunth/SmartStream/Algorithm/build/AlgorithmTest/plugins/TrafficCount/lib:$ORIGIN:$ORIGIN/plugins/TrafficCount/lib -Wl,--disable-new-dtags ")
+#set_target_properties(AlgorithmTest PROPERTIES LINK_FLAGS "-Wl,-rpath,./plugins/TrafficCount/lib:./:./lib:/vms/code/sunth/SmartStream/Algorithm/build/AlgorithmTest/plugins/TrafficCount/lib:$ORIGIN:$ORIGIN/plugins/TrafficCount/lib")
+#set_target_properties(AlgorithmTest PROPERTIES LINK_FLAGS "-Wl,--enable-new-dtags -Wl,-rpath,./plugins/TrafficCount/lib:./:./lib:/vms/code/sunth/SmartStream/Algorithm/build/AlgorithmTest/plugins/TrafficCount/lib:$ORIGIN:$ORIGIN/plugins/TrafficCount/lib")
+
+target_link_libraries(AlgorithmTest AlgorithmManager ${POCO_LIBRARIES} ${OpenCV_LIBS} ${FFMPEG_LIBRARIES} ${CUDA_LIBRARIES})
+
 
 #if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
 #	if (CMAKE_BUILD_TYPE MATCHES "Debug")

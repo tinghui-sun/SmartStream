@@ -14,7 +14,7 @@ GlobalParm& GlobalParm::instance()
 
 bool GlobalParm::loadConfig(const PluginParam& param)
 {
-	m_pluginPath = param.pluginPath;	//插件所在目录绝对路径。目录结构由算法自己决定，建议pluginPath/conf 存放插件配置文件, pluginPath/model 存放模型。
+	m_pluginPath = param.pluginPath;	//插件所在目录绝对路径。目录结构由算法自己决定，建议pluginPath/conf 存放插件配置文件, pluginPath/model 存放模型。	
 	m_logger = param.logger;
 
 	//string configFilePath;

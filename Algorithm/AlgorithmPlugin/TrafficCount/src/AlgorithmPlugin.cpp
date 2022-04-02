@@ -50,6 +50,7 @@ shared_ptr<AlgorithmVAInterface> AlgorithmPlugin::createVAAlgorithm(int gpuId)
 	{
 		return nullptr;
 	}
+
 	return std::make_shared<VideoAnalysis>(gpuId);
 }
 
@@ -65,6 +66,7 @@ shared_ptr<AlgorithmIRInterface> AlgorithmPlugin::createIRAlgorithm(int gpuId)
 	{
 		return nullptr;
 	}
+
 	return std::make_shared<ImageRetrieval>(gpuId);;
 }
 

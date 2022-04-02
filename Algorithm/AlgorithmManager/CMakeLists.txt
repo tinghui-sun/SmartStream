@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.10)
 
 project(AlgorithmManager)
 
@@ -15,6 +15,8 @@ set(CODES ${__CODES})
 #aux_source_directory(./http __CODES)
 #set(CODES ${CODES} ${__CODES})
 
+message("POCO_INCLUDE_DIRS"${POCO_INCLUDE_DIRS})
+
 include_directories(../include)
 include_directories(${POCO_INCLUDE_DIRS})
 include_directories(${FFMPEG_INCLUDE_DIRS})
@@ -26,7 +28,8 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
 endif()
 
 add_library(AlgorithmManager SHARED ${CODES})
+#set_target_properties(AlgorithmManager PROPERTIES LINK_FLAGS "-Wl,-rpath,./plugins/TrafficCount/lib:./:./lib:/vms/code/sunth/SmartStream/Algorithm/build/AlgorithmTest/plugins/TrafficCount/lib:$ORIGIN:$ORIGIN/plugins/TrafficCount/lib -Wl,--disable-new-dtags")
 #add_library(AlgorithmManager SHARED ${CODES} ${FFMPEG_LIBRARYS} ${POCO_LIBRARYS})
 
-install(TARGETS AlgorithmManager DESTINATION ${LIBRARY_PATH})
+#install(TARGETS AlgorithmManager DESTINATION ${LIBRARY_PATH})
 #add_subdirectory(test)

@@ -128,7 +128,7 @@ bool AlgorithmManager::initManager()
 #else	
 			m_PluginPathMap[i] = curPluginPath + Path::separator() + pluginName.append(SharedLibrary::suffix());
 #endif
-			AlgoMsgError(AlgorithmLogger::instance(), "AlgorithmManager::AlgorithmManager add plugin %s", m_PluginPathMap[i].c_str());
+			AlgoMsgError(AlgorithmLogger::instance(), "AlgorithmManager::AlgorithmManager add plugin %s-%s",ALGOName[i].c_str(), m_PluginPathMap[i].c_str());
 		}
 		else
 		{
@@ -137,6 +137,7 @@ bool AlgorithmManager::initManager()
 	}
 
 	//把动态库位置记录到Path环境变量，loadLibrary时会在该目录下查找动态库	
+	AlgoMsgError(AlgorithmLogger::instance(), "AlgorithmManager::AlgorithmManager set path[%s]", curPath.c_str());
 #ifdef __GNUC__		
 	Environment::set("LD_LIBRARY_PATH", curPath);
 #else	
@@ -147,7 +148,7 @@ bool AlgorithmManager::initManager()
 }
 
 
-AlgorithmPluginInterface* AlgorithmManager::getAlgorithmPlugin(ALGOType type, list<int> gpuNum)
+AlgorithmPluginInterface* AlgorithmManager::getAlgorithmPlugin(ALGOType type)
 {
 	if (!m_inited)
 	{
@@ -169,7 +170,7 @@ AlgorithmPluginInterface* AlgorithmManager::getAlgorithmPlugin(ALGOType type, li
 	auto algorithmPluginIt = m_AlgorithmPluginMap.find(type);
 	if (algorithmPluginIt == m_AlgorithmPluginMap.end())
 	{//每个类型的算法插件只有一个
-		algorithmPlugin = createAlgorithmPlugin(type, gpuNum);
+		algorithmPlugin = createAlgorithmPlugin(type);
 		if (nullptr != algorithmPlugin)
 		{
 			m_AlgorithmPluginMap[type] = algorithmPlugin;
@@ -184,7 +185,7 @@ AlgorithmPluginInterface* AlgorithmManager::getAlgorithmPlugin(ALGOType type, li
 }
 
 
-AlgorithmPluginInterface* AlgorithmManager::createAlgorithmPlugin(ALGOType type, list<int> gpuNum)
+AlgorithmPluginInterface* AlgorithmManager::createAlgorithmPlugin(ALGOType type)
 {
 	string pluginPath = m_PluginPathMap[type];
 
@@ -207,6 +208,10 @@ AlgorithmPluginInterface* AlgorithmManager::createAlgorithmPlugin(ALGOType type,
 	{
 		try
 		{
+			std::string libraryPath = Environment::get("LD_LIBRARY_PATH");
+			AlgorithmLogger::instance()->log(AlgoLogError, "pluginPath [%s]", pluginPath.c_str());
+			AlgorithmLogger::instance()->log(AlgoLogError, "LD_LIBRARY_PATH [%s]", libraryPath.c_str());
+
 			algorithmClassLoader->loadLibrary(pluginPath);
 		}
 		catch (const Exception& e)
@@ -219,7 +224,7 @@ AlgorithmPluginInterface* AlgorithmManager::createAlgorithmPlugin(ALGOType type,
 	try
 	{
 		PluginParam param;
-		param.gpuList = gpuNum;
+		//param.gpuList = gpuNum;
 		param.pluginPath = Path(pluginPath).parent().parent().absolute().toString();
 		param.logger = AlgorithmLogger::instance();
 		

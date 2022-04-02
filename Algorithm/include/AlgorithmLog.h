@@ -60,6 +60,17 @@ else\
 	printf("\r");\
 }
 
+#define AlgoMsgInfo(logger, fmt, ...)\
+if (logger)\
+{\
+	logger->log(AlgoLogInfo, fmt, ##__VA_ARGS__);\
+}\
+else\
+{\
+	printf(fmt,  ##__VA_ARGS__);\
+	printf("\r");\
+}
+
 #define AlgoMsgDebug(logger, fmt, ...)\
 if (logger)\
 {\

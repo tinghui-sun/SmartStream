@@ -800,7 +800,7 @@ struct ALGOImageInfo
 	string imageId;					//输入图片的ID,由算法调用者生成，全局唯一
 	ALGOImageFormat imageFormate = ALGOImageFormatJpeg; //图片格式，参见VCM_IMAGE_FORMAT_E
 	int imageWidth = 0;				//输入图片的宽
-	int imageHeigth = 0;			//输入图片的高
+	int imageHeight = 0;			//输入图片的高
 	ALGOBufferType imageBufferType = ALGOBufferCPU; //存放图片的内存地址类型
 	char* imageBuffer = nullptr;	//由算法调用者分配,算法调用者在algorithmVAFinished毁掉中释放
 	int imageBufferLen = 0;
@@ -815,7 +815,6 @@ struct ALGOVAResult
 	map<ALGOObjType, list<ALGOObjectParam>> objParams;	//分析出的图片中的物体信息,按照物体类型分组
 	//list<ALGOObjectParam> objParams;		//分析出的图片中的物体信息,按照物体类型分组
 	int statisticsNum = 0;					//人员、车辆等统计算法得到的统计数量。是对一系列图片统计后的数值。对objParams有做去重
-	string userData;						//算法想要透传给上层应用的数据
 };
 
 struct ROIPoint
@@ -872,7 +871,6 @@ struct IRCompareResult
 struct PluginParam
 {
 	string pluginPath;	//插件所在目录绝对路径。目录结构由算法自己决定，建议pluginPath/conf 存放插件配置文件, pluginPath/model 存放模型。
-	list<int> gpuList;	//算法使用哪些GPU，为空使用CPU
 	shared_ptr<AlgoLoggerInterface> logger;
 };
 
@@ -899,9 +897,16 @@ public:
 
 	virtual ALGOAbility getAbility() = 0;
 
-	virtual ErrAlgorithm analyzeImage(const std::list<ALGOImageInfo>& imageList) = 0;
-
+	//注册异步分析的回调监听类
 	void registerAVResListener(shared_ptr<AlgorithmVAListener> vaListener) { m_vaResListener = vaListener; }
+
+	//异步分析函数
+	virtual ErrAlgorithm analyzeImageASync(const std::list<ALGOImageInfo>& imageList) = 0;
+
+	//同步分析函数
+	virtual ErrAlgorithm analyzeImageSync(const std::list<ALGOImageInfo>& imageList, std::list <ALGOVAResult>& vaResult) = 0;
+
+	
 	
 protected:
 	//Video Analysis分析结束后的回调监听
@@ -951,11 +956,15 @@ public:
 	virtual ErrAlgorithm pluginRelease() = 0;
 
 	//创建、销毁Video Analysis算法
-	virtual shared_ptr<AlgorithmVAInterface> createVAAlgorithm() = 0;
+	//gpuId < 0 :使用CPU
+	//gpuId > 0 :使用指定GPU
+	virtual shared_ptr<AlgorithmVAInterface> createVAAlgorithm(int gpuId) = 0;
 	virtual void destoryVAAlgorithm(shared_ptr<AlgorithmVAInterface> algo) = 0;
 
 	//创建、销毁Image Retrieval算法
-	virtual shared_ptr<AlgorithmIRInterface> createIRAlgorithm() = 0;
+	//gpuId < 0 :使用CPU
+	//gpuId > 0 :使用指定GPU
+	virtual shared_ptr<AlgorithmIRInterface> createIRAlgorithm(int gpuId) = 0;
 	virtual void destoryIRAlgorithm(shared_ptr<AlgorithmIRInterface> algo) = 0;
 	
 };

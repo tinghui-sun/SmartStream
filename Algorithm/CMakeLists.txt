@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.10)
 
 project(Algorithm)
 
@@ -11,6 +11,8 @@ set(OpenCV_DIR ${ThirdPartPath}/opencv)
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 list(APPEND CMAKE_MODULE_PATH ${ThirdPartPath}/cmake)
 list(APPEND CMAKE_MODULE_PATH ${OpenCV_DIR})
+
+message ("CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH})
 
 set(CMAKE_PREFIX_PATH ${CMAKE_MODULE_PATH})
 

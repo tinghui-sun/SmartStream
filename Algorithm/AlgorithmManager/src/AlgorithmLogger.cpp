@@ -55,8 +55,9 @@ shared_ptr<AlgoLoggerInterface> AlgorithmLogger::instance()
 
 void AlgorithmLogger::forceFlushLog()
 {
+#if 1
 	//开启flush
-	FormattingChannel* pFChannel = static_cast<FormattingChannel*>(m_pAsyncFile->getChannel());
+	FormattingChannel* pFChannel = dynamic_cast<FormattingChannel*>(m_pAsyncFile->getChannel());
 	pFChannel->getChannel()->setProperty("flush", "true");
 
 	//刷新所有日志
@@ -68,6 +69,7 @@ void AlgorithmLogger::forceFlushLog()
 
 	//关闭flush
 	pFChannel->getChannel()->setProperty("flush", "false");
+#endif
 }
 
 void AlgorithmLogger::startWatch()
@@ -299,6 +301,7 @@ void AlgorithmLogger::run()
 
 void AlgorithmLogger::setLogLevel(LoggerPtr p_pLog, int nLevel)
 {
+#if 1
 	//1、flush状态enable
 	FormattingChannel* pFChannel = static_cast<FormattingChannel*>(m_pAsyncFile->getChannel());
 	pFChannel->getChannel()->setProperty("flush", "true");
@@ -320,6 +323,7 @@ void AlgorithmLogger::setLogLevel(LoggerPtr p_pLog, int nLevel)
 
 	//4、设置日志级别
 	p_pLog->setLevel(nLevel);
+#endif
 }
 
 void AlgorithmLogger::log(AlgoLogPriority level, const string& msg)

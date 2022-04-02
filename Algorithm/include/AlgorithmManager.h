@@ -31,7 +31,7 @@ public:
 
 	//根据接入协议类型Id获取对应的DeviceFactory。外部只使用不释放
 	//函数内部已经调用了AlgorithmPluginInterface::pluginInitialize。
-	AlgorithmPluginInterface* getAlgorithmPlugin(ALGOType type, list<int> gpuNum);
+	AlgorithmPluginInterface* getAlgorithmPlugin(ALGOType type);
 
 	bool initManager();
 
@@ -39,7 +39,7 @@ public:
 
 private:
 	AlgorithmManager();
-	AlgorithmPluginInterface* createAlgorithmPlugin(ALGOType type, list<int> gpuNum);
+	AlgorithmPluginInterface* createAlgorithmPlugin(ALGOType type);
 
 private:
 	Poco::FastMutex m_AlgorithmPluginMapMutex;
