@@ -8,8 +8,6 @@ endif ()
 
 find_package(POCO REQUIRED)
 
-set(SDK_DIR ${PROJECT_SOURCE_DIR}/AlgorithmPlugin/PluginDemo/SDK)
-
 aux_source_directory(src __CODES)
 set(CODES ${__CODES})
 
@@ -24,5 +22,5 @@ endif()
 
 add_library(PluginDemo SHARED ${CODES})
 
-#install(TARGETS PluginDemo DESTINATION ${LIBRARY_PATH})
+install(TARGETS PluginDemo DESTINATION ${CMAKE_PLUGINS_PREFIX}/${PROJECT_NAME}/lib/)
 

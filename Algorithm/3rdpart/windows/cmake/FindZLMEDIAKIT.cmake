@@ -1,0 +1,83 @@
+set(ZLMEDIAKIT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/3rdpart/ZLMediaKit/${CMAKE_SYSTEM_NAME})
+
+find_path(ZLTOOLKIT_INCLUDE_DIR 
+	NAMES 
+	Network/Socket.h
+	PATHS 
+	${ZLMEDIAKIT_PATH}/include/ZLToolKit/
+	)
+	
+find_path(ZLMEDIAKIT_INCLUDE_DIR 
+	NAMES 
+	Common/config.h
+	PATHS 
+	${ZLMEDIAKIT_PATH}/include/ZLMediaKit/
+	)
+	
+find_path(API_INCLUDE_DIR 
+	NAMES 
+	mk_common.h
+	PATHS 
+	${ZLMEDIAKIT_PATH}/include/
+	)
+
+find_library(FLV_LIBRARIE
+	NAMES 		 	
+	flv
+	PATHS 
+	${ZLMEDIAKIT_PATH}/lib/
+	)
+
+find_library(API_LIBRARIE
+	NAMES 		 	
+	mk_api
+	PATHS 
+	${ZLMEDIAKIT_PATH}/lib/
+	)
+	
+find_library(MOV_LIBRARIE
+	NAMES 		 	
+	mov
+	PATHS 
+	${ZLMEDIAKIT_PATH}/lib/
+	)
+
+find_library(MPEG_LIBRARIE
+	NAMES 		 	
+	mpeg
+	PATHS 
+	${ZLMEDIAKIT_PATH}/lib/
+	)
+
+find_library(ZLMEDIAKIT_LIBRARIE
+	NAMES 		 	
+	zlmediakit
+	PATHS 
+	${ZLMEDIAKIT_PATH}/lib/
+	)
+
+find_library(ZLTOOLKIT_LIBRARIE
+	NAMES 		 	
+	zltoolkit
+	PATHS 
+	${ZLMEDIAKIT_PATH}/lib/
+	)
+
+if(ZLTOOLKIT_INCLUDE_DIR AND ZLMEDIAKIT_INCLUDE_DIR AND API_INCLUDE_DIR)
+	set(ZLMEDIAKIT_INCLUDE_DIRS ${ZLTOOLKIT_INCLUDE_DIR} ${ZLMEDIAKIT_INCLUDE_DIR} ${API_INCLUDE_DIR})
+else()
+	message(FATAL_ERROR, "zlmediakit include dir not find! ${ZLMEDIAKIT_PATH}")
+endif()
+
+if(FLV_LIBRARIE AND MOV_LIBRARIE AND MPEG_LIBRARIE AND ZLMEDIAKIT_LIBRARIE AND ZLTOOLKIT_LIBRARIE AND API_LIBRARIE)
+	set(ZLMEDIAKIT_LINK_DIRECTORIES ${ZLMEDIAKIT_PATH}/lib/)
+else()
+	message(FATAL_ERROR, "zlmediakit libraries not find! ${ZLMEDIAKIT_PATH}")
+endif()
+
+if(ZLMEDIAKIT_INCLUDE_DIRS AND ZLMEDIAKIT_LINK_DIRECTORIES)
+	include(FindPackageHandleStandardArgs)
+	find_package_handle_standard_args(ZLMEDIAKIT DEFAULT_MSG ZLMEDIAKIT_INCLUDE_DIRS ZLMEDIAKIT_LINK_DIRECTORIES)
+else()
+	message(FATAL_ERROR "zlmediakit not found! ${ZLMEDIAKIT_PATH}")
+endif()

@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.10)
 
 project(Algorithm)
 
-#设置bin和lib库目录
 set(ThirdPartPath ${PROJECT_SOURCE_DIR}/3rdpart/${CMAKE_SYSTEM_NAME})
 set(FFMPEG_PATH ${ThirdPartPath}/ffmpeg)
 set(POCO_PATH ${ThirdPartPath}/Poco)
@@ -12,9 +11,11 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 list(APPEND CMAKE_MODULE_PATH ${ThirdPartPath}/cmake)
 list(APPEND CMAKE_MODULE_PATH ${OpenCV_DIR})
 
-message ("CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH})
+message ("CMAKE_MODULE_PATH" ${CMAKE_MODULE_PATH})
 
 set(CMAKE_PREFIX_PATH ${CMAKE_MODULE_PATH})
+
+set(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR}/install CACHE PATH "" FORCE)
 
 add_subdirectory(AlgorithmManager)
 add_subdirectory(AlgorithmTest)

@@ -1,10 +1,17 @@
 project(AlgorithmPlugin)
 
-#1. å¦‚æœç¬¬ä¸‰æ–¹åº“æœ‰RUNPATH é€šè¿‡ä¸‹é¢å·¥å…·åˆ é™¤
+#1. Èç¹ûµÚÈı·½¿âÓĞRUNPATH Í¨¹ıÏÂÃæ¹¤¾ßÉ¾³ı
 #https://blog.csdn.net/Longyu_wlz/article/details/108550528
-#2. åœ¨lib***æ’ä»¶åŠ¨æ€åº“ä¸ŠåŠ å…¥ rpathï¼Œä¸‰æ–¹åº“æŸ¥æ‰¾è·¯å¾„
+
+#2. ÔÚlib***²å¼ş¶¯Ì¬¿âÉÏ¼ÓÈë rpath£¬Èı·½¿â²éÕÒÂ·¾¶
+
+
+set(CMAKE_PLUGINS_PREFIX ${CMAKE_INSTALL_PREFIX}/plugins CACHE PATH "" FORCE)
+
 add_subdirectory(PluginDemo)
 add_subdirectory(TrafficCount)
 #add_subdirectory(FaceDetection)
 #add_subdirectory(FaceRecognition)
 
+
+install(FILES plugins.ini DESTINATION ${CMAKE_PLUGINS_PREFIX})
