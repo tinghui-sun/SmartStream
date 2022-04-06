@@ -28,7 +28,7 @@ ErrAlgorithm AlgorithmPlugin::pluginInitialize(const PluginParam& pluginParam)
 {
 	m_inited = true;
 	GlobalParm::instance().loadConfig(pluginParam);
-	AlgoMsgDebug(m_logger, "MultiTargetDetection init success!");
+	AlgoMsgDebug(m_logger, "PluginDemo init success!");
 	return ErrALGOSuccess; 
 }
 
@@ -39,7 +39,7 @@ ErrAlgorithm AlgorithmPlugin::pluginRelease()
 	{
 		return ErrALGOSuccess;
 	}
-	AlgoMsgDebug(m_logger, "MultiTargetDetection release success!");
+	AlgoMsgDebug(m_logger, "PluginDemo release success!");
 	return ErrALGOSuccess;
 }
 

@@ -24,3 +24,12 @@ add_library(PluginDemo SHARED ${CODES})
 
 install(TARGETS PluginDemo DESTINATION ${CMAKE_PLUGINS_PREFIX}/${PROJECT_NAME}/lib/)
 
+set_target_properties(PluginDemo PROPERTIES LINK_FLAGS "-Wl,-rpath,./plugins/3rdpart/Poco/lib/ -Wl,--disable-new-dtags")
+
+#安装配置文件
+install(
+    DIRECTORY ${PROJECT_SOURCE_DIR}/config
+    DESTINATION  ${CMAKE_PLUGINS_PREFIX}/${PROJECT_NAME}/
+    )
+
+
