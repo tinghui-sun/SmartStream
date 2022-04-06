@@ -4,19 +4,19 @@
 #include "CppUnit/TestCase.h"
 #include "AlgorithmManager.h"
 
-class SDKTest :public CppUnit::TestCase,
+class AlgorithmTest :public CppUnit::TestCase,
 	public AlgorithmVAListener,
-	public enable_shared_from_this<SDKTest>
+	public enable_shared_from_this<AlgorithmTest>
 {
 public:
-	SDKTest(const std::string& name);
-	~SDKTest();
+	AlgorithmTest(const std::string& name);
+	~AlgorithmTest();
 
 public:
-	void PluginInitTest();
 	void LogTest();
-	void PTest();
-	void MotorVehicleStatistics();
+	void PluginDemoTest();
+	void MotorVehicleStatisticsTest();
+
 
 private:
 	virtual void algorithmVAFinished(const std::list <ALGOVAResult>& vaResult) override;

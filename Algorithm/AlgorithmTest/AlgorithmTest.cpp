@@ -1,15 +1,14 @@
-#include "SDKTest.h"
-#include "CppUnit/TestCaller.h"
-#include "CppUnit/TestSuite.h"
-#include "AlgorithmLog.h"
+#include "AlgorithmTest.h"
 #include <iostream>
 #include <assert.h>
 #include <chrono>
 #include <thread>
 #include <list>
 #include <vector>
-#include <opencv2/opencv.hpp>
 
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
+#include "opencv2/opencv.hpp"
 #include "cuda_runtime_api.h"
 #include "cuda.h"
 
@@ -112,7 +111,7 @@ public:
 
 				char tmp[20]={0};
 				sprintf(tmp, "%04d.jpg", index++);
-				imwrite("/home/jiuling/xj/data/tmp/"+string(tmp), img);
+				imwrite("/home/tmp/"+string(tmp), img);
 
 				ofstream file(faceDetectSaveFile, ios::binary|ios::app);
 				if (file.is_open())
@@ -153,18 +152,18 @@ public:
 };
 
 
-SDKTest::SDKTest(const std::string& name)
-	:CppUnit::TestCase("SDKTest")
+AlgorithmTest::AlgorithmTest(const std::string& name)
+	:CppUnit::TestCase("AlgorithmTest")
 {
 
 }
 
-SDKTest::~SDKTest()
+AlgorithmTest::~AlgorithmTest()
 {
 
 }
 
-void SDKTest::PluginInitTest()
+void AlgorithmTest::PluginDemoTest()
 {
 	AlgorithmManager::instances().initManager();
 	AlgorithmPluginInterface* mtdPlugin = AlgorithmManager::instances().getAlgorithmPlugin(ALGOTypePluginDemo);
@@ -199,59 +198,19 @@ void SDKTest::PluginInitTest()
 	mtdPlugin->destoryVAAlgorithm(mtdAlgo);
 }
 
-void SDKTest::LogTest()
+void AlgorithmTest::LogTest()
 {
 	AlgorithmManager::instances().testLog();
-	//Sleep(5000);//等待一步日志写结束
 	cout << "LogTest" << endl;
 }
 
-void SDKTest::algorithmVAFinished(const std::list <ALGOVAResult>& vaResult)
+void AlgorithmTest::algorithmVAFinished(const std::list <ALGOVAResult>& vaResult)
 {
 
-}
-
-void SDKTest::setUp()
-{
-
-}
-
-void SDKTest::tearDown()
-{
-
-}
-
-void SDKTest::PTest()
-{
-	cout << "----------PTest----------" << endl;
-
-	std::list<int> gpuList;
-	gpuList.push_back(1);
-	AlgorithmManager::instances().initManager();
-	
-	auto c = getchar();
-	cout<<"\n\n"<<endl;
-	if(c!='a')
-	{
-		AlgorithmPluginInterface* mtdPlugin = AlgorithmManager::instances().getAlgorithmPlugin(ALGOTypeFaceDetection);
-		shared_ptr<AlgorithmVAInterface>  mtdAlgo = mtdPlugin->createVAAlgorithm(0);
-		cout<<"++---1 mtdPlugin:"<<mtdPlugin<<endl;
-		cout<<"++---1 mtdAlgo:"<<mtdAlgo<<endl;
-	}
-	cout<<"\n\n"<<endl;
-	if(c!='b')
-	{
-		gpuList.push_back(2);
-		AlgorithmPluginInterface* mtdPlugin1 = AlgorithmManager::instances().getAlgorithmPlugin(ALGOTypeFaceRecognition);
-		shared_ptr<AlgorithmIRInterface>  mtdAlgo1 = mtdPlugin1->createIRAlgorithm(0);
-		cout<<"++---2 mtdPlugin1:"<<mtdPlugin1<<endl;
-		cout<<"++---2 mtdAlgo1:"<<mtdAlgo1<<endl;
-	}
-	return;
 }
 
 #define GPUTest
-void SDKTest::MotorVehicleStatistics()
+void AlgorithmTest::MotorVehicleStatisticsTest()
 {
 	AlgorithmManager::instances().initManager();
 	AlgorithmPluginInterface* mtdPlugin = AlgorithmManager::instances().getAlgorithmPlugin(ALGOTypeMotorVehicleStatistics);
@@ -345,14 +304,23 @@ void SDKTest::MotorVehicleStatistics()
 #endif
 }
 
-CppUnit::Test* SDKTest::suite()
+void AlgorithmTest::setUp()
+{
+
+}
+
+void AlgorithmTest::tearDown()
+{
+
+}
+
+CppUnit::Test* AlgorithmTest::suite()
 {
 	CppUnit::TestSuite* pSuite = new CppUnit::TestSuite("AlgorithmTest");
 
-	CppUnit_addTest(pSuite, SDKTest, PluginInitTest);
-	CppUnit_addTest(pSuite, SDKTest, MotorVehicleStatistics);
-	CppUnit_addTest(pSuite, SDKTest, LogTest);
-	CppUnit_addTest(pSuite, SDKTest, PTest);
+	CppUnit_addTest(pSuite, AlgorithmTest, PluginDemoTest);
+	CppUnit_addTest(pSuite, AlgorithmTest, MotorVehicleStatisticsTest);
+	CppUnit_addTest(pSuite, AlgorithmTest, LogTest);
 	return pSuite;
 }
 

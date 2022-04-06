@@ -4,7 +4,7 @@
 
 #include "CppUnit/TestSuite.h"
 
-class SDKUnitTest
+class AlgorithmUnitTest
 {
 public:
 	static CppUnit::Test* suite();
