@@ -165,7 +165,7 @@ ErrAlgorithm VideoAnalysis::initEngine()
 		return ErrALGOSuccess;
 	}
 
-	std::string modelPath("/vms/code/sunth/SmartStream/Algorithm/build/AlgorithmTest/plugins/TrafficCount/model/TrafficCounting.smartmore");
+	std::string modelPath(GlobalParm::instance().m_modlePath);
  	smartmore::ResultCode rs = mTrafficCountingEngine.init(modelPath, mGPUId);
 	if(rs != smartmore::ResultCode::Success)
 	{

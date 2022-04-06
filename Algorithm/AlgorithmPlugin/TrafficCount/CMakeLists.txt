@@ -70,10 +70,12 @@ target_link_libraries(TrafficCount ${smdnnmodel_LIBRARIES}
 
 
 #设置rpath，修改库查找路径
-set_target_properties(TrafficCount PROPERTIES LINK_FLAGS "-Wl,-rpath,./:./plugins/TrafficCount/lib/ -Wl,--disable-new-dtags")
+set_target_properties(TrafficCount PROPERTIES LINK_FLAGS "-Wl,-rpath,./plugins/3rdpart/Poco/lib/:./plugins/TrafficCount/lib/ -Wl,--disable-new-dtags")
 
+#安装插件库
 install(TARGETS TrafficCount DESTINATION ${CMAKE_PLUGINS_PREFIX}/${PROJECT_NAME}/lib/)
 
+#安装第三方以来库
 install(
     DIRECTORY ${smdnnmodel_DIR}/lib/ ${OpenCV_DIR}/../lib/ ${TensorRT_DIR}/lib/ ${ONNXRuntime_DIR}/lib/ ${TrafficCounter_DIR}/lib/ ${ByteTrack_DIR}/lib/
     DESTINATION  ${CMAKE_PLUGINS_PREFIX}/${PROJECT_NAME}/lib
@@ -82,6 +84,19 @@ install(
     PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ
     GROUP_EXECUTE GROUP_READ
     )
+
+#安装配置文件
+install(
+    DIRECTORY ${PROJECT_SOURCE_DIR}/config
+    DESTINATION  ${CMAKE_PLUGINS_PREFIX}/${PROJECT_NAME}/
+    )
+
+#安装模型文件
+install(
+    DIRECTORY ${TrafficCountSDK_DIR}/model
+    DESTINATION  ${CMAKE_PLUGINS_PREFIX}/${PROJECT_NAME}/
+)
+
 
 #需要移除libTrafficCounter.so的rpath，否则会覆盖掉插件库的rpath，导致无法找到依赖库
 #patchelf --remove-rpath /vms/code/sunth/SmartStream/Algorithm/build_linux/install/plugins/TrafficCount/lib/libTrafficCounter.so

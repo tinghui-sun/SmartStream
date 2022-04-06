@@ -26,9 +26,28 @@ AlgorithmPlugin::~AlgorithmPlugin()
 //初始化算法插件
 ErrAlgorithm AlgorithmPlugin::pluginInitialize(const PluginParam& pluginParam)
 {
-	m_inited = true;
-	GlobalParm::instance().loadConfig(pluginParam);
-	AlgoMsgDebug(m_logger, "MultiTargetDetection init success!");
+	if(!m_inited)
+	{
+		if(!GlobalParm::instance().loadConfig(pluginParam))
+		{
+			AlgoMsgError(m_logger, "AlgorithmPlugin init failed!");
+			return ErrALGOConfigInvalid;
+		}
+		else
+		{
+		  	//Engine
+  			smartmore::TrafficCounter trafficCountingEngine;
+			smartmore::ResultCode rs = trafficCountingEngine.init(GlobalParm::instance().m_modlePath, 0);
+			if(rs != smartmore::ResultCode::Success)
+			{
+				AlgoMsgError(m_logger, "trafficCountingEngine.init failed![%s]", GlobalParm::instance().m_modlePath.c_str());
+				return ErrALGOInitFailed;
+			}
+		}
+  		m_inited = true;
+	}
+
+	AlgoMsgDebug(m_logger, "TrafficCount init success!");
 	return ErrALGOSuccess; 
 }
 
@@ -39,7 +58,7 @@ ErrAlgorithm AlgorithmPlugin::pluginRelease()
 	{
 		return ErrALGOSuccess;
 	}
-	AlgoMsgDebug(m_logger, "MultiTargetDetection release success!");
+	AlgoMsgDebug(m_logger, "TrafficCount release success!");
 	return ErrALGOSuccess;
 }
 
@@ -82,11 +101,11 @@ POCO_END_MANIFEST
 
 void pocoInitializeLibrary()
 {
-	std::cout << "PluginDemo initializing" << std::endl;
+	std::cout << "TrafficCount initializing" << std::endl;
 }
 
 
 void pocoUninitializeLibrary()
 {
-	std::cout << "PluginDemo uninitialzing" << std::endl;
+	std::cout << "TrafficCount uninitialzing" << std::endl;
 }
