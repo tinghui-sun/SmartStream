@@ -31,6 +31,7 @@ enum ALGOType
 	ALGOTypeCommonRecognition,			//通用识别算法
 	ALGOTypeVideoQualityDetection,		//视频质量检测
 	ALGOTypePluginDemo,					//插件示例
+	ALGOTypeLeaveDetection,				//离岗检测算法
 	ALGOTypeMax							//
 };
 
@@ -786,7 +787,7 @@ struct ALGOObjProperty
 struct ALGOObjectParam
 {
 	int objectId = 0;		//算法内部生成的对象ID,可用于判断是否为同一对象
-	int objType;			//物体类型
+	int objType = 0;			//物体类型
 	std::string objLabel;	//标注物体的名称
 	float confidence = 0;	//相识度0到1之间的浮点数，越靠近1越类似
 	int roiId = 0;			//当前目标所在ROI区域ID
@@ -950,7 +951,7 @@ public:
 	virtual ~AlgorithmPluginInterface() {};
 
 	//初始化算法插件
-	virtual ErrAlgorithm pluginInitialize(const PluginParam& pluginParam) = 0;
+	virtual ErrAlgorithm pluginInitialize(const PluginParam& pluginParam, int gpuId) = 0;
 
 	//释放算法插件
 	virtual ErrAlgorithm pluginRelease() = 0;

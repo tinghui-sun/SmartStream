@@ -1,7 +1,6 @@
 #pragma once
 #include "Algorithm.h"
-#include "ByteTrack/BYTETracker.h"
-#include "TrafficCounter.h"
+#include "VimoDetectionModule.h"
 
 class VideoAnalysis: public AlgorithmVAInterface
 {
@@ -16,15 +15,12 @@ public:
 
 private:
 	ErrAlgorithm initEngine();
-  ALGOObjType getObjectType(const string& labelName);		
 	
 private:
-  std::vector<std::string> mClassesNames;
   //Engine
-  smartmore::TrafficCounter mTrafficCountingEngine;
-
+  smartmore::VimoDetectionModule mEngine;
+  
   //Tracker
-  std::vector<byte_track::BYTETracker> mTrackers;
   bool inited = false;
   int mGPUId = 0;
 };

@@ -24,7 +24,7 @@ AlgorithmPlugin::~AlgorithmPlugin()
 }
 
 //初始化算法插件
-ErrAlgorithm AlgorithmPlugin::pluginInitialize(const PluginParam& pluginParam)
+ErrAlgorithm AlgorithmPlugin::pluginInitialize(const PluginParam& pluginParam, int gpuId)
 {
 	if(!m_inited)
 	{
@@ -37,7 +37,7 @@ ErrAlgorithm AlgorithmPlugin::pluginInitialize(const PluginParam& pluginParam)
 		{
 		  	//Engine
   			smartmore::TrafficCounter trafficCountingEngine;
-			smartmore::ResultCode rs = trafficCountingEngine.init(GlobalParm::instance().m_modlePath, 0);
+			smartmore::ResultCode rs = trafficCountingEngine.init(GlobalParm::instance().m_modlePath, gpuId);
 			if(rs != smartmore::ResultCode::Success)
 			{
 				AlgoMsgError(m_logger, "trafficCountingEngine.init failed![%s]", GlobalParm::instance().m_modlePath.c_str());

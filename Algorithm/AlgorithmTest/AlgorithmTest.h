@@ -16,6 +16,7 @@ public:
 	void LogTest();
 	void PluginDemoTest();
 	void MotorVehicleStatisticsTest();
+	void LeaveDetectionTest();
 
 
 private:

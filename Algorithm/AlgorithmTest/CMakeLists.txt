@@ -1,6 +1,8 @@
 #	
 project(AlgorithmTest)
 
+set(CUDA_TOOLKIT_ROOT_DIR  /usr/local/cuda-11.1/)
+
 #set(CMAKE_BUILD_TYPE Release)
 
 if (CMAKE_SYSTEM_NAME MATCHES "Linux")

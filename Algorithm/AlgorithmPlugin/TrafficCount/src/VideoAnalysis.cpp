@@ -30,6 +30,29 @@ ErrAlgorithm VideoAnalysis::analyzeImageASync(const std::list <ALGOImageInfo>& i
 	return ErrALGOUnSupport;
 }
 
+ALGOObjType VideoAnalysis::getObjectType(const string& labelName)
+{
+	//SDK中标签
+	// person
+	// car
+	// bus
+	// trunk
+
+	if(labelName.compare("car") == 0
+		|| labelName.compare("bus") == 0
+		|| labelName.compare("trunk") == 0 )
+	{
+		return ALGOObjTypeMotor;
+	}
+
+	if(labelName.compare("person") == 0)
+	{
+		return ALGOObjTypeBody;
+	}
+
+	return ALGOObjTypeDefault;
+}
+
 ErrAlgorithm VideoAnalysis::analyzeImageSync(const std::list<ALGOImageInfo>& imageList, std::list <ALGOVAResult>& vaResults)
 {
 	AlgoMsgDebug(GlobalParm::instance().m_logger, "VideoAnalysis::analyzeImage start!");
@@ -123,32 +146,40 @@ ErrAlgorithm VideoAnalysis::analyzeImageSync(const std::list<ALGOImageInfo>& ima
 
 		for (size_t i = 0; i < mClassesNames.size(); i++)
 		{
-			ALGOObjType type = ALGOObjTypeMotor;//TODO		
-			list<ALGOObjectParam> objectList;
-
-			if(!trackResults[i].empty())
+			//把算法的Lable按照ALGOObjType分类
+			ALGOObjType type = getObjectType(mClassesNames[i]);
+			if(ALGOObjTypeDefault != type)
 			{
-				for (auto trackResult:trackResults[i])
-				{
-					ALGOObjectParam object;
-					object.boundingBox.x = trackResult->getRect().x();
-					object.boundingBox.y = trackResult->getRect().y();
-					object.boundingBox.width = trackResult->getRect().width();
-					object.boundingBox.height = trackResult->getRect().height();
+				list<ALGOObjectParam> objectList;
 
-					object.objectId = trackResult->getTrackId();
-					object.confidence = trackResult->getScore();
-					object.objLabel = mClassesNames[i];
-					object.objType = i;
-					//object.propertyList = ;
-					//object.roiId = ;
-					objectList.emplace_back(object);
+				if(!trackResults[i].empty())
+				{
+					for (auto trackResult:trackResults[i])
+					{
+						ALGOObjectParam object;
+						object.boundingBox.x = trackResult->getRect().x();
+						object.boundingBox.y = trackResult->getRect().y();
+						object.boundingBox.width = trackResult->getRect().width();
+						object.boundingBox.height = trackResult->getRect().height();
+
+						object.objectId = trackResult->getTrackId();
+						object.confidence = trackResult->getScore();
+						object.objLabel = mClassesNames[i];
+						object.objType = i;
+						//object.propertyList = ;
+						//object.roiId = ;
+						objectList.emplace_back(object);
+					}
+				}
+
+				if(!objectList.empty())
+				{
+					vaResult.objParams[type] = objectList;
 				}
 			}
-
-			if(!objectList.empty())
+			else
 			{
-				vaResult.objParams[type] = objectList;
+				AlgoMsgDebug(GlobalParm::instance().m_logger, "VideoAnalysis::analyzeImage unknow objLable %s!", mClassesNames[i].c_str());
 			}
 		}
 
@@ -182,7 +213,7 @@ ErrAlgorithm VideoAnalysis::initEngine()
 
 	for(auto& className:mClassesNames)
 	{
-		AlgoMsgDebug(GlobalParm::instance().m_logger, "VideoAnalysis::analyzeImage start %s!", className.c_str());
+		AlgoMsgDebug(GlobalParm::instance().m_logger, "VideoAnalysis::initEngine labelName[%s]!", className.c_str());
 	}
 	
 	inited = true;

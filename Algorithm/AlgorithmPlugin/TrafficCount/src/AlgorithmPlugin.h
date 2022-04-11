@@ -12,7 +12,7 @@ public:
 	virtual ~AlgorithmPlugin();
 
 	//初始化算法插件
-	virtual ErrAlgorithm pluginInitialize(const PluginParam& pluginParam) override;
+	virtual ErrAlgorithm pluginInitialize(const PluginParam& pluginParam, int gpuId) override;
 
 	//释放算法插件
 	virtual ErrAlgorithm pluginRelease() override;

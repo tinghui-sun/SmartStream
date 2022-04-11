@@ -166,7 +166,7 @@ AlgorithmTest::~AlgorithmTest()
 void AlgorithmTest::PluginDemoTest()
 {
 	AlgorithmManager::instances().initManager();
-	AlgorithmPluginInterface* mtdPlugin = AlgorithmManager::instances().getAlgorithmPlugin(ALGOTypePluginDemo);
+	AlgorithmPluginInterface* mtdPlugin = AlgorithmManager::instances().getAlgorithmPlugin(ALGOTypePluginDemo, 0);
 
 	assert(mtdPlugin != nullptr);
 	
@@ -213,7 +213,7 @@ void AlgorithmTest::algorithmVAFinished(const std::list <ALGOVAResult>& vaResult
 void AlgorithmTest::MotorVehicleStatisticsTest()
 {
 	AlgorithmManager::instances().initManager();
-	AlgorithmPluginInterface* mtdPlugin = AlgorithmManager::instances().getAlgorithmPlugin(ALGOTypeMotorVehicleStatistics);
+	AlgorithmPluginInterface* mtdPlugin = AlgorithmManager::instances().getAlgorithmPlugin(ALGOTypeMotorVehicleStatistics, 0);
 
 	assert(mtdPlugin != nullptr);
 
@@ -228,7 +228,7 @@ void AlgorithmTest::MotorVehicleStatisticsTest()
 	std::list<ALGOImageInfo> imageList;
  	std::list <ALGOVAResult> vaResult;
 
-	cv::Mat image = cv::imread("/vms/code/sunth/SmartStream/Algorithm/build/AlgorithmTest/images/image_00000001.jpg");
+	cv::Mat image = cv::imread("/Algorithm/AlgorithmPlugin/TrafficCount/TrafficCount/images/image_00000001.jpg");
 
 	int rows = image.rows;
 	int cols = image.cols;
@@ -290,7 +290,100 @@ void AlgorithmTest::MotorVehicleStatisticsTest()
 
 					rsStr << "\n";
 				}
+			}
 
+			cout << rsStr.str() << endl;
+		}
+	}
+
+	mtdPlugin->destoryVAAlgorithm(mtdAlgo);
+
+#ifdef GPUTest
+	cudaFree(cudaBuff);
+#endif
+}
+
+
+void AlgorithmTest::LeaveDetectionTest()
+{
+	AlgorithmManager::instances().initManager();
+	AlgorithmPluginInterface* mtdPlugin = AlgorithmManager::instances().getAlgorithmPlugin(ALGOTypeLeaveDetection, 0);
+
+	assert(mtdPlugin != nullptr);
+
+	int gpuId = 0;
+	shared_ptr<AlgorithmVAInterface>  mtdAlgo = mtdPlugin->createVAAlgorithm(gpuId);
+	assert(mtdAlgo);
+
+	auto listener = std::make_shared<VAResListener>();
+	mtdAlgo->registerAVResListener(listener);
+
+
+	std::list<ALGOImageInfo> imageList;
+ 	std::list <ALGOVAResult> vaResult;
+
+	cv::Mat image = cv::imread("/Algorithm/AlgorithmPlugin/TrafficCount/TrafficCount/images/image_00000001.jpg");
+
+	int rows = image.rows;
+	int cols = image.cols;
+	int num_el = rows*cols;
+	int totalSize1 = num_el*image.elemSize();
+
+
+	int totalSize2 = image.total()*image.elemSize();
+
+	cout << "len1 " << totalSize1 << " len2 " << totalSize2;
+
+	ALGOImageInfo info;
+	info.imageBufferLen = totalSize2;	
+	info.imageFormate = ALGOImageFormatCVMat;
+	info.imageWidth =  image.cols;
+	info.imageHeight = image.rows;
+	info.imageId = "1";
+
+#ifdef GPUTest
+	void* cudaBuff = nullptr;
+	cudaSetDevice(gpuId);	
+	cudaMalloc(&cudaBuff, totalSize1);	
+	auto cudaErr = cudaMemcpy(cudaBuff, image.data, totalSize1, cudaMemcpyHostToDevice);	
+	info.imageBuffer = (char*)cudaBuff;
+	info.imageBufferType = ALGOBufferGPU;
+#else
+	info.imageBuffer = (char*)image.data;
+	info.imageBufferType = ALGOBufferCPU;
+#endif
+
+	imageList.emplace_back(info);
+	ErrAlgorithm rs = mtdAlgo->analyzeImageSync(imageList, vaResult);
+
+
+	if(rs == ErrALGOSuccess)
+	{
+		for(auto vaRs : vaResult)
+		{		
+			stringstream rsStr;	
+			for(auto objParamsIt : vaRs.objParams)
+			{
+				rsStr << vaRs.code << " ";
+				rsStr << objParamsIt.first << " ";
+				rsStr << "\n";
+
+				for(auto objInfo:objParamsIt.second)
+				{
+					rsStr << objInfo.objectId << " ";
+					rsStr << objInfo.objType << " ";
+					rsStr << objInfo.objLabel << " ";
+					rsStr << objInfo.boundingBox.width << " ";
+					rsStr << objInfo.boundingBox.height << " ";
+
+					for(auto property : objInfo.propertyList)
+					{
+						rsStr << property.propertyName << " ";
+						rsStr << property.propertyValue << " ";
+					}
+
+					rsStr << "\n";
+				}
 			}
 
 			cout << rsStr.str() << endl;
@@ -320,6 +413,7 @@ CppUnit::Test* AlgorithmTest::suite()
 
 	CppUnit_addTest(pSuite, AlgorithmTest, PluginDemoTest);
 	CppUnit_addTest(pSuite, AlgorithmTest, MotorVehicleStatisticsTest);
+	CppUnit_addTest(pSuite, AlgorithmTest, LeaveDetectionTest);
 	CppUnit_addTest(pSuite, AlgorithmTest, LogTest);
 	return pSuite;
 }

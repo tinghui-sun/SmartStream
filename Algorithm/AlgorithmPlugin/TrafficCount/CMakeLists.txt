@@ -6,6 +6,8 @@ if (CMAKE_SYSTEM_NAME MATCHES "Linux")
 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=gnu++0x -Wl,-Bsymbolic")
 endif()
 
+set(CUDA_TOOLKIT_ROOT_DIR /usr/local/cuda-11.1/)
+
 #set(CMAKE_BUILD_TYPE "Release" CACHE STRING "set build type to release" FORCE)
 
 # CPP STANDARD

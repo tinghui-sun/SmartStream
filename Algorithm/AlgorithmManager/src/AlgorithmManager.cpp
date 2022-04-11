@@ -39,6 +39,7 @@ string ALGOName[]
 	"CommonRecognition",
 	"VideoQualityDetection",
 	"PluginDemo",
+	"LeaveDetection"
 };
 
 AlgorithmManager::AlgorithmManager()
@@ -148,7 +149,7 @@ bool AlgorithmManager::initManager()
 }
 
 
-AlgorithmPluginInterface* AlgorithmManager::getAlgorithmPlugin(ALGOType type)
+AlgorithmPluginInterface* AlgorithmManager::getAlgorithmPlugin(ALGOType type, int gpuId)
 {
 	if (!m_inited)
 	{
@@ -170,7 +171,7 @@ AlgorithmPluginInterface* AlgorithmManager::getAlgorithmPlugin(ALGOType type)
 	auto algorithmPluginIt = m_AlgorithmPluginMap.find(type);
 	if (algorithmPluginIt == m_AlgorithmPluginMap.end())
 	{//每个类型的算法插件只有一个
-		algorithmPlugin = createAlgorithmPlugin(type);
+		algorithmPlugin = createAlgorithmPlugin(type, gpuId);
 		if (nullptr != algorithmPlugin)
 		{
 			m_AlgorithmPluginMap[type] = algorithmPlugin;
@@ -185,7 +186,7 @@ AlgorithmPluginInterface* AlgorithmManager::getAlgorithmPlugin(ALGOType type)
 }
 
 
-AlgorithmPluginInterface* AlgorithmManager::createAlgorithmPlugin(ALGOType type)
+AlgorithmPluginInterface* AlgorithmManager::createAlgorithmPlugin(ALGOType type, int gpuId)
 {
 	string pluginPath = m_PluginPathMap[type];
 
@@ -231,7 +232,7 @@ AlgorithmPluginInterface* AlgorithmManager::createAlgorithmPlugin(ALGOType type)
 		//插件的类名必须是AlgorithmPlugin
 		algorithmPlugin = algorithmClassLoader->classFor("AlgorithmPlugin").create();
 		//初始化插件
-		if (algorithmPlugin->pluginInitialize(param) != ErrALGOSuccess)
+		if (algorithmPlugin->pluginInitialize(param, gpuId) != ErrALGOSuccess)
 		{
 			AlgorithmLogger::instance()->log(AlgoLogError, "AlgorithmManager::createDeviceFactory pluginInitialize failed！");
 			return nullptr;

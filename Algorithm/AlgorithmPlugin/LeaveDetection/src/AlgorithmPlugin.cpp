@@ -8,6 +8,7 @@
 #include "GlobalParm.h"
 #include "VideoAnalysis.h"
 #include "ImageRetrieval.h"
+#include "VimoDetectionModule.h"
 
 #if !defined(_WIN32)
 #include<pthread.h>
@@ -26,9 +27,28 @@ AlgorithmPlugin::~AlgorithmPlugin()
 //初始化算法插件
 ErrAlgorithm AlgorithmPlugin::pluginInitialize(const PluginParam& pluginParam, int gpuId)
 {
-	m_inited = true;
-	GlobalParm::instance().loadConfig(pluginParam);
-	AlgoMsgDebug(m_logger, "PluginDemo init success!");
+	if(!m_inited)
+	{
+		if(!GlobalParm::instance().loadConfig(pluginParam))
+		{
+			AlgoMsgError(m_logger, "LeaveDetection init failed!");
+			return ErrALGOConfigInvalid;
+		}
+		else
+		{
+		  	//Engine
+  			smartmore::VimoDetectionModule engine;
+			smartmore::ResultCode rs = engine.Init(GlobalParm::instance().m_modlePath, false, gpuId);
+			if(rs != smartmore::ResultCode::Success)
+			{
+				AlgoMsgError(m_logger, "LeaveDetection.init failed![%s]", GlobalParm::instance().m_modlePath.c_str());
+				return ErrALGOInitFailed;
+			}
+		}
+  		m_inited = true;
+	}
+
+	AlgoMsgDebug(m_logger, "LeaveDetection init success!");
 	return ErrALGOSuccess; 
 }
 
@@ -39,7 +59,7 @@ ErrAlgorithm AlgorithmPlugin::pluginRelease()
 	{
 		return ErrALGOSuccess;
 	}
-	AlgoMsgDebug(m_logger, "PluginDemo release success!");
+	AlgoMsgDebug(m_logger, "LeaveDetection release success!");
 	return ErrALGOSuccess;
 }
 
@@ -50,6 +70,7 @@ shared_ptr<AlgorithmVAInterface> AlgorithmPlugin::createVAAlgorithm(int gpuId)
 	{
 		return nullptr;
 	}
+
 	return std::make_shared<VideoAnalysis>(gpuId);
 }
 
@@ -65,6 +86,7 @@ shared_ptr<AlgorithmIRInterface> AlgorithmPlugin::createIRAlgorithm(int gpuId)
 	{
 		return nullptr;
 	}
+
 	return std::make_shared<ImageRetrieval>(gpuId);;
 }
 
@@ -80,11 +102,11 @@ POCO_END_MANIFEST
 
 void pocoInitializeLibrary()
 {
-	std::cout << "PluginDemo initializing" << std::endl;
+	std::cout << "LeaveDetection initializing" << std::endl;
 }
 
 
 void pocoUninitializeLibrary()
 {
-	std::cout << "PluginDemo uninitialzing" << std::endl;
+	std::cout << "LeaveDetection uninitialzing" << std::endl;
 }

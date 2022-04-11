@@ -9,9 +9,8 @@ project(AlgorithmPlugin)
 set(CMAKE_PLUGINS_PREFIX ${CMAKE_INSTALL_PREFIX}/plugins CACHE PATH "" FORCE)
 
 add_subdirectory(PluginDemo)
-add_subdirectory(TrafficCount)
-#add_subdirectory(FaceDetection)
-#add_subdirectory(FaceRecognition)
+#add_subdirectory(TrafficCount)
+add_subdirectory(LeaveDetection)
 
 
 install(FILES plugins.ini DESTINATION ${CMAKE_PLUGINS_PREFIX})
